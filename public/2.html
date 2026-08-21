@@ -8,6 +8,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- CodeMirror -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/javascript/javascript.min.js"></script>
 <script id="tailwind-config">
   tailwind.config = {
     darkMode: "class",
@@ -56,6 +60,37 @@
     .cursor-blink {
         animation: blink 1s step-end infinite;
     }
+
+    /* CodeMirror Zen Terminal Theme */
+    .CodeMirror {
+        height: 100%;
+        width: 100%;
+        background: transparent !important;
+        color: theme('colors.text-main') !important;
+        font-family: 'Fira Code', monospace !important;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+    .CodeMirror-gutters {
+        background: transparent !important;
+        border-right: none !important;
+    }
+    .CodeMirror-linenumber {
+        color: theme('colors.muted') !important;
+        opacity: 0.5;
+        padding-right: 16px !important;
+        text-align: right;
+    }
+    .CodeMirror-cursor {
+        border-left: 2px solid theme('colors.primary') !important;
+    }
+    .cm-s-default .cm-keyword { color: theme('colors.primary') !important; }
+    .cm-s-default .cm-def { color: theme('colors.warning') !important; }
+    .cm-s-default .cm-variable, .cm-s-default .cm-property { color: theme('colors.text-main') !important; }
+    .cm-s-default .cm-string { color: theme('colors.error') !important; }
+    .cm-s-default .cm-comment { color: theme('colors.muted') !important; font-style: italic; }
+    .cm-s-default .cm-number { color: theme('colors.warning') !important; }
+    .CodeMirror-focused .CodeMirror-selected { background: theme('colors.primary') !important; opacity: 0.3; }
 
     /* Custom Scrollbar for Editor */
     ::-webkit-scrollbar {
@@ -114,18 +149,15 @@
 <!-- 60% Editor Pane -->
 <section class="w-[60%] flex flex-col border-r border-border-color bg-background relative">
 <!-- Line Numbers & Code Area -->
-<div class="flex-1 overflow-auto flex p-4 pb-12">
-<!-- Line Numbers -->
-<div class="w-10 shrink-0 text-right pr-4 text-muted font-mono text-[14px] leading-relaxed select-none opacity-50">
-                    1<br>2<br>3<br>4
-                </div>
-<!-- Editor Input Area (Simulated) -->
-<div class="flex-1 font-mono text-[14px] leading-relaxed text-text-main outline-none cursor-text relative">
-<span class="text-primary italic">// Welcome to CodeSense Zen Terminal</span><br>
-<span class="text-primary italic">// Paste your TypeScript code here</span><br>
-<br>
-<span class="inline-block w-2 h-4 bg-primary/70 align-middle cursor-blink ml-1 -mt-1"></span>
-</div>
+<div class="flex-1 overflow-hidden relative">
+<textarea id="code-editor">// Welcome to CodeSense Zen Terminal
+// Paste your TypeScript code here
+
+function calculateHealth(code: string): number {
+  const issues = analyze(code);
+  return issues.length === 0 ? 100 : 50;
+}
+</textarea>
 </div>
 <!-- Editor Status Bar (Optional minimal footer) -->
 <div class="h-8 border-t border-border-color flex items-center justify-between px-4 text-muted text-xs absolute bottom-0 w-full bg-background">
@@ -163,8 +195,20 @@
 </section>
 </main>
 <script>
+        // Initialize CodeMirror
+        const editor = CodeMirror.fromTextArea(document.getElementById('code-editor'), {
+            lineNumbers: true,
+            mode: 'text/typescript',
+            theme: 'default', // Custom CSS overrides this theme
+            viewportMargin: Infinity
+        });
+
         // Simple interaction to show loading state
         document.getElementById('analyze-btn').addEventListener('click', function() {
+            // Grab the actual code from the editor
+            const code = editor.getValue();
+            console.log("Analyzing Code:\\n", code);
+
             const overlay = document.getElementById('loading-overlay');
             overlay.classList.remove('hidden');
             overlay.classList.add('flex');
@@ -173,6 +217,9 @@
             setTimeout(() => {
                 overlay.classList.add('hidden');
                 overlay.classList.remove('flex');
+                
+                // You can add logic here to process the 'code' variable
+                // and update the right pane with the results!
             }, 2000);
         });
     </script>
