@@ -1,0 +1,181 @@
+<!DOCTYPE html><html class="dark" lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>CodeSense: Zen Terminal - Empty State</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "primary": "#698F61",
+          "background": "#121312",
+          "surface": "#1A1C1A",
+          "text-main": "#E3E8E1",
+          "muted": "#7A8578",
+          "error": "#CF665A",
+          "warning": "#D1AD58",
+          "border-color": "#2A2E2A"
+        },
+        fontFamily: {
+          "ui": ["Plus Jakarta Sans", "sans-serif"],
+          "mono": ["Fira Code", "monospace"]
+        },
+        borderRadius: {
+            "panel": "12px",
+            "button": "6px",
+        },
+        spacing: {
+            "base": "24px"
+        }
+      },
+    },
+  }
+</script>
+<style>
+    body {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        background-color: theme('colors.background');
+        color: theme('colors.text-main');
+    }
+    .font-mono {
+        font-family: 'Fira Code', monospace;
+    }
+    
+    /* Blinking cursor animation */
+    @keyframes blink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0; }
+    }
+    .cursor-blink {
+        animation: blink 1s step-end infinite;
+    }
+
+    /* Custom Scrollbar for Editor */
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+        background: transparent; 
+    }
+    ::-webkit-scrollbar-thumb {
+        background: theme('colors.border-color'); 
+        border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: theme('colors.muted'); 
+    }
+</style>
+</head>
+<body class="min-h-screen flex flex-col overflow-hidden selection:bg-primary/30 selection:text-text-main">
+<!-- Top Navigation -->
+<header class="h-16 bg-background border-b border-border-color px-6 flex items-center justify-between shrink-0">
+<!-- Logo & Title -->
+<div class="flex items-center gap-3">
+<div class="w-6 h-6 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]">terminal</span>
+</div>
+<h1 class="text-text-main font-semibold text-[18px] tracking-tight">CodeSense</h1>
+</div>
+<!-- Center / Language Selector (Optional, depending on specific design, placing here for balance) -->
+<div class="hidden md:flex items-center">
+<button class="flex items-center gap-2 h-8 px-3 rounded-button bg-surface hover:bg-border-color transition-colors border border-border-color text-text-main text-sm font-medium">
+<span class="material-symbols-outlined text-[16px] text-muted">code</span>
+                TypeScript
+                <span class="material-symbols-outlined text-[16px] text-muted">expand_more</span>
+</button>
+</div>
+<!-- Actions -->
+<div class="flex items-center gap-3"><button class="h-8 px-4 rounded-button text-muted hover:text-text-main hover:bg-surface transition-colors text-[13px] font-semibold flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">login</span>
+                Login with GitHub
+            </button>
+<button class="h-8 px-4 rounded-button text-muted hover:text-text-main hover:bg-surface transition-colors text-[13px] font-semibold flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">upload</span>
+                Push to GitHub
+            </button>
+<button class="h-8 px-4 rounded-button text-muted hover:text-text-main hover:bg-surface transition-colors text-[13px] font-semibold">
+                Export
+            </button>
+<button class="h-8 px-4 rounded-button bg-primary text-background hover:bg-primary/90 transition-colors text-[13px] font-semibold shadow-sm" id="analyze-btn">
+                Analyze Now
+            </button>
+</div>
+</header>
+<!-- Main Workspace Split -->
+<main class="flex-1 flex overflow-hidden">
+<!-- 60% Editor Pane -->
+<section class="w-[60%] flex flex-col border-r border-border-color bg-background relative">
+<!-- Line Numbers & Code Area -->
+<div class="flex-1 overflow-auto flex p-4 pb-12">
+<!-- Line Numbers -->
+<div class="w-10 shrink-0 text-right pr-4 text-muted font-mono text-[14px] leading-relaxed select-none opacity-50">
+                    1<br>2<br>3<br>4
+                </div>
+<!-- Editor Input Area (Simulated) -->
+<div class="flex-1 font-mono text-[14px] leading-relaxed text-text-main outline-none cursor-text relative">
+<span class="text-primary italic">// Welcome to CodeSense Zen Terminal</span><br>
+<span class="text-primary italic">// Paste your TypeScript code here</span><br>
+<br>
+<span class="inline-block w-2 h-4 bg-primary/70 align-middle cursor-blink ml-1 -mt-1"></span>
+</div>
+</div>
+<!-- Editor Status Bar (Optional minimal footer) -->
+<div class="h-8 border-t border-border-color flex items-center justify-between px-4 text-muted text-xs absolute bottom-0 w-full bg-background">
+<div class="flex gap-4">
+<span class="">UTF-8</span>
+<span class="">Spaces: 2</span>
+</div>
+<div class="">Ln 4, Col 1</div>
+</div>
+</section>
+<!-- 40% Feedback Pane (Empty State) -->
+<section class="w-[40%] bg-surface flex flex-col relative">
+<!-- Hidden Loading Overlay -->
+<div class="absolute inset-0 bg-surface/80 backdrop-blur-sm z-10 hidden flex-col items-center justify-center" id="loading-overlay">
+<span class="material-symbols-outlined text-primary text-4xl animate-spin mb-4">progress_activity</span>
+<p class="text-text-main font-medium text-sm animate-pulse">Analyzing code structure...</p>
+</div>
+<div class="flex-1 flex flex-col items-center justify-center p-8 text-center">
+<div class="w-16 h-16 rounded-2xl bg-background border border-border-color flex items-center justify-center mb-6 shadow-inner">
+<span class="material-symbols-outlined text-[32px] text-muted">bolt</span>
+</div>
+<h3 class="text-text-main font-semibold text-[18px] mb-2">Ready for Input</h3>
+<p class="text-muted text-[14px] max-w-[280px] leading-relaxed">
+                    Write or paste code to begin analysis. We'll check for issues, generate docs, and calculate a health score.
+                </p>
+<!-- Keyboard Shortcut Hint -->
+<div class="mt-8 flex items-center gap-2 text-xs text-muted">
+<span class="">Press</span>
+<kbd class="px-2 py-1 rounded bg-background border border-border-color font-mono text-[10px]">Cmd</kbd>
+<span class="">+</span>
+<kbd class="px-2 py-1 rounded bg-background border border-border-color font-mono text-[10px]">Enter</kbd>
+<span class="">to analyze</span>
+</div>
+</div>
+</section>
+</main>
+<script>
+        // Simple interaction to show loading state
+        document.getElementById('analyze-btn').addEventListener('click', function() {
+            const overlay = document.getElementById('loading-overlay');
+            overlay.classList.remove('hidden');
+            overlay.classList.add('flex');
+            
+            // Auto hide after 2 seconds for demo purposes
+            setTimeout(() => {
+                overlay.classList.add('hidden');
+                overlay.classList.remove('flex');
+            }, 2000);
+        });
+    </script>
+
+
+</body></html>

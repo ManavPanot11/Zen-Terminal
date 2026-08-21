@@ -1,0 +1,208 @@
+<!DOCTYPE html><html class="dark" lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>CodeSense: Zen Terminal - Editor: Score Active</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Fira+Code:wght@400;500&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "primary": "#698F61",
+          "background": "#121312",
+          "surface": "#1A1C1A",
+          "text": "#E3E8E1",
+          "muted": "#7A8578",
+          "error": "#CF665A",
+          "warning": "#D1AD58",
+          "border": "#2A2E2A"
+        },
+        fontFamily: {
+          "ui": ["Plus Jakarta Sans", "sans-serif"],
+          "mono": ["Fira Code", "monospace"]
+        },
+        borderRadius: {
+          "DEFAULT": "0.5rem",
+          "panel": "12px",
+          "btn": "6px",
+          "lg": "1rem",
+          "xl": "1.5rem",
+          "full": "9999px"
+        },
+        spacing: {
+          "base": "24px"
+        }
+      },
+    },
+  }
+</script>
+<style>
+  body {
+    background-color: theme('colors.background');
+    color: theme('colors.text');
+    font-family: theme('fontFamily.ui');
+  }
+  
+  .glow-shadow {
+    box-shadow: inset 0 0 20px rgba(105, 143, 97, 0.2);
+  }
+</style>
+</head>
+<body class="h-screen w-full flex flex-col overflow-hidden text-sm">
+<!-- Top Navigation -->
+<header class="h-16 flex items-center justify-between px-6 border-b border-border bg-background shrink-0">
+<div class="flex items-center gap-4">
+<div class="text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-2xl">terminal</span>
+</div>
+<h1 class="font-semibold text-lg tracking-wide text-text">CodeSense</h1>
+<div class="h-4 w-px bg-border mx-2"></div>
+<div class="relative">
+<select class="appearance-none bg-surface border border-border text-text text-sm rounded-btn h-8 pl-3 pr-8 focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer">
+<option>TypeScript</option>
+<option>Python</option>
+<option>Rust</option>
+</select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-muted">
+<span class="material-symbols-outlined text-sm">expand_more</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-3"><button class="h-8 px-4 rounded-btn text-text hover:bg-surface transition-colors font-medium text-xs flex items-center gap-2 border border-transparent hover:border-border"><span class="material-symbols-outlined text-sm">login</span>Login with GitHub</button>
+<button class="h-8 px-4 rounded-btn text-text hover:bg-surface transition-colors font-medium text-xs flex items-center gap-2 border border-transparent hover:border-border">
+<span class="material-symbols-outlined text-sm">cloud_upload</span>
+        Push to GitHub
+      </button>
+<button class="h-8 px-4 rounded-btn text-text hover:bg-surface transition-colors font-medium text-xs flex items-center gap-2 border border-transparent hover:border-border">
+<span class="material-symbols-outlined text-sm">download</span>
+        Export
+      </button>
+<button class="h-8 px-5 rounded-btn bg-primary text-background font-semibold text-xs hover:bg-opacity-90 transition-opacity ml-2">
+        Analyze Now
+      </button>
+</div>
+</header>
+<!-- Main Workspace -->
+<main class="flex-1 flex w-full overflow-hidden">
+<!-- Left Pane: Editor (60%) -->
+<section class="w-[60%] h-full flex flex-col bg-background border-r border-border relative">
+<div class="flex items-center justify-between px-4 h-10 border-b border-border bg-background/50">
+<div class="flex items-center gap-2 text-muted text-xs font-mono">
+<span class="material-symbols-outlined text-sm">description</span>
+<span class="">src/api/auth.ts</span>
+</div>
+</div>
+<div class="flex-1 overflow-auto p-4 font-mono text-sm leading-relaxed text-muted relative" id="editor-container">
+<!-- Pseudo Monaco Editor Content -->
+<div class="flex">
+<div class="w-10 text-right pr-4 opacity-50 select-none">
+            1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15
+          </div>
+<div class="flex-1 text-[#E3E8E1] whitespace-pre">
+<span class="text-primary">import</span> { Request, Response } <span class="text-primary">from</span> 'express';
+<span class="text-primary">import</span> jwt <span class="text-primary">from</span> 'jsonwebtoken';
+<span class="text-primary">import</span> { User } <span class="text-primary">from</span> '../models/user';
+
+<span class="text-primary">export const</span> <span class="text-warning">loginHandler</span> = <span class="text-primary">async</span> (req: Request, res: Response) =&gt; {
+  <span class="text-primary">const</span> { email, password } = req.body;
+
+  <span class="text-muted italic">// TODO: Implement rate limiting here</span>
+<span class="text-primary">if</span> (!email || !password) {
+    <span class="text-primary">return</span> res.status(400).json({ error: 'Missing credentials' });
+  }
+
+  <span class="text-primary">try</span> {
+    <span class="text-primary">const</span> user = <span class="text-primary">await</span> User.findOne({ email });
+    <span class="text-primary">if</span> (!user) {
+      <span class="text-primary">return</span> res.status(401).json({ error: 'Invalid email or password' });
+    }
+          </div>
+</div>
+</div>
+</section>
+<!-- Right Pane: Feedback / Score Active (40%) -->
+<section class="w-[40%] h-full bg-surface flex flex-col">
+<!-- Tabs -->
+<nav class="flex px-4 border-b border-border h-12 shrink-0">
+<a class="h-full flex items-center px-4 text-muted hover:text-text text-sm font-medium transition-colors border-b-2 border-transparent" href="#">
+          Issues (3)
+        </a>
+<a class="h-full flex items-center px-4 text-muted hover:text-text text-sm font-medium transition-colors border-b-2 border-transparent" href="#">
+          Docs
+        </a>
+<a class="h-full flex items-center px-4 text-primary text-sm font-medium border-b-2 border-primary" href="#">
+          Score
+        </a>
+</nav>
+<!-- Score Content -->
+<div class="flex-1 overflow-y-auto p-8 flex flex-col items-center justify-start">
+<div class="text-center mb-12 mt-8">
+<h2 class="text-xl font-semibold mb-2 text-text">Code Health</h2>
+<p class="text-muted text-sm max-w-xs mx-auto">A holistic view of your current file's structure, security, and performance.</p>
+</div>
+<!-- Central Score Circle -->
+<div class="relative w-[180px] h-[180px] flex items-center justify-center mb-12">
+<!-- Outer decorative ring -->
+<svg class="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
+<circle cx="50" cy="50" fill="none" r="46" stroke="var(--color-border)" stroke-width="4"></circle>
+<!-- The dasharray/offset would typically be calculated dynamically based on score -->
+<circle class="transition-all duration-1000 ease-out" cx="50" cy="50" fill="none" r="46" stroke="var(--color-primary)" stroke-dasharray="289" stroke-dashoffset="40" stroke-linecap="round" stroke-width="6"></circle>
+</svg>
+<!-- Inner circle with glow -->
+<div class="w-[140px] h-[140px] rounded-full bg-background flex flex-col items-center justify-center border border-border glow-shadow relative z-10">
+<span class="text-5xl font-semibold text-text leading-none tracking-tight">86</span>
+<span class="text-xs text-primary font-medium mt-1">Excellent</span>
+</div>
+</div>
+<!-- Metrics Breakdown -->
+<div class="w-full max-w-sm flex flex-col gap-3">
+<!-- Metric: Security -->
+<div class="group bg-background rounded-panel p-4 border border-border hover:border-primary/50 transition-colors cursor-default flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface flex items-center justify-center text-muted group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-sm">security</span>
+</div>
+<div>
+<div class="font-medium text-text text-sm">Security</div>
+<div class="text-xs text-muted">1 Warning</div>
+</div>
+</div>
+<div class="text-lg font-semibold text-warning">82</div>
+</div>
+<!-- Metric: Performance -->
+<div class="group bg-background rounded-panel p-4 border border-border hover:border-primary/50 transition-colors cursor-default flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface flex items-center justify-center text-muted group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-sm">speed</span>
+</div>
+<div>
+<div class="font-medium text-text text-sm">Performance</div>
+<div class="text-xs text-muted">Optimized</div>
+</div>
+</div>
+<div class="text-lg font-semibold text-text">95</div>
+</div>
+<!-- Metric: Complexity -->
+<div class="group bg-background rounded-panel p-4 border border-border hover:border-primary/50 transition-colors cursor-default flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface flex items-center justify-center text-muted group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-sm">account_tree</span>
+</div>
+<div>
+<div class="font-medium text-text text-sm">Complexity</div>
+<div class="text-xs text-muted">2 Issues</div>
+</div>
+</div>
+<div class="text-lg font-semibold text-warning">78</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+
+
+</body></html>
